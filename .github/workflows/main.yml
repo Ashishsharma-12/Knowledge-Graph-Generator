@@ -1,4 +1,4 @@
-name: Deploy to GCP Cloud Run
+name: Deploy KG to GCP Cloud Run
 
 on:
   push:
