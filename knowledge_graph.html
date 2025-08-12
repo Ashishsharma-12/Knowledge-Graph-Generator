@@ -1,0 +1,170 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 800px;
+                 background-color: #222222;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+             #config {
+                 float: left;
+                 width: 400px;
+                 height: 600px;
+             }
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+            <div id="config"></div>
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"font": {"color": "white"}, "group": "Plant", "id": "Hypericum Androsaemum", "label": "Hypericum Androsaemum", "shape": "dot", "title": "Type: Plant\u003cbr\u003eProperties: {}"}, {"font": {"color": "white"}, "group": "Common name", "id": "Shrubby St. John\u0027S Wort", "label": "Shrubby St. John\u0027S Wort", "shape": "dot", "title": "Type: Common name\u003cbr\u003eProperties: {}"}, {"font": {"color": "white"}, "group": "Common name", "id": "Tutsan", "label": "Tutsan", "shape": "dot", "title": "Type: Common name\u003cbr\u003eProperties: {}"}, {"font": {"color": "white"}, "group": "Common name", "id": "Sweet-Amber", "label": "Sweet-Amber", "shape": "dot", "title": "Type: Common name\u003cbr\u003eProperties: {}"}, {"font": {"color": "white"}, "group": "Family", "id": "Hypericaceae", "label": "Hypericaceae", "shape": "dot", "title": "Type: Family\u003cbr\u003eProperties: {}"}, {"font": {"color": "white"}, "group": "Genus", "id": "Hypericum", "label": "Hypericum", "shape": "dot", "title": "Type: Genus\u003cbr\u003eProperties: {}"}, {"font": {"color": "white"}, "group": "Section", "id": "Hypericum Sect. Androsaemum", "label": "Hypericum Sect. Androsaemum", "shape": "dot", "title": "Type: Section\u003cbr\u003eProperties: {}"}, {"font": {"color": "white"}, "group": "Person", "id": "Carl Linnaeus", "label": "Carl Linnaeus", "shape": "dot", "title": "Type: Person\u003cbr\u003eProperties: {}"}, {"font": {"color": "white"}, "group": "Person", "id": "Norman Robson", "label": "Norman Robson", "shape": "dot", "title": "Type: Person\u003cbr\u003eProperties: {}"}, {"font": {"color": "white"}, "group": "Genus", "id": "Androsaemum", "label": "Androsaemum", "shape": "dot", "title": "Type: Genus\u003cbr\u003eProperties: {}"}, {"font": {"color": "white"}, "group": "Location", "id": "Western Europe", "label": "Western Europe", "shape": "dot", "title": "Type: Location\u003cbr\u003eProperties: {}"}, {"font": {"color": "white"}, "group": "Location", "id": "North Africa", "label": "North Africa", "shape": "dot", "title": "Type: Location\u003cbr\u003eProperties: {}"}, {"font": {"color": "white"}, "group": "Location", "id": "Middle East", "label": "Middle East", "shape": "dot", "title": "Type: Location\u003cbr\u003eProperties: {}"}, {"font": {"color": "white"}, "group": "Location", "id": "Australia", "label": "Australia", "shape": "dot", "title": "Type: Location\u003cbr\u003eProperties: {}"}, {"font": {"color": "white"}, "group": "Location", "id": "New Zealand", "label": "New Zealand", "shape": "dot", "title": "Type: Location\u003cbr\u003eProperties: {}"}, {"font": {"color": "white"}, "group": "Concept", "id": "Noxious Weed", "label": "Noxious Weed", "shape": "dot", "title": "Type: Concept\u003cbr\u003eProperties: {}"}, {"font": {"color": "white"}, "group": "Concept", "id": "Ornamental Plant", "label": "Ornamental Plant", "shape": "dot", "title": "Type: Concept\u003cbr\u003eProperties: {}"}, {"font": {"color": "white"}, "group": "Cultivar", "id": "Albury Purple", "label": "Albury Purple", "shape": "dot", "title": "Type: Cultivar\u003cbr\u003eProperties: {}"}, {"font": {"color": "white"}, "group": "Cultivar", "id": "Golden Tutsan", "label": "Golden Tutsan", "shape": "dot", "title": "Type: Cultivar\u003cbr\u003eProperties: {}"}, {"font": {"color": "white"}, "group": "Substance", "id": "Red Pigment", "label": "Red Pigment", "shape": "dot", "title": "Type: Substance\u003cbr\u003eProperties: {}"}, {"font": {"color": "white"}, "group": "Substance", "id": "Xanthone", "label": "Xanthone", "shape": "dot", "title": "Type: Substance\u003cbr\u003eProperties: {}"}, {"font": {"color": "white"}, "group": "Chemical", "id": "Chlorogenic Acid", "label": "Chlorogenic Acid", "shape": "dot", "title": "Type: Chemical\u003cbr\u003eProperties: {}"}, {"font": {"color": "white"}, "group": "Chemical", "id": "Shikimic Acid", "label": "Shikimic Acid", "shape": "dot", "title": "Type: Chemical\u003cbr\u003eProperties: {}"}, {"font": {"color": "white"}, "group": "Chemical", "id": "Rutin", "label": "Rutin", "shape": "dot", "title": "Type: Chemical\u003cbr\u003eProperties: {}"}, {"font": {"color": "white"}, "group": "Chemical", "id": "Epicatechin", "label": "Epicatechin", "shape": "dot", "title": "Type: Chemical\u003cbr\u003eProperties: {}"}, {"font": {"color": "white"}, "group": "Chemical", "id": "Hyperoside", "label": "Hyperoside", "shape": "dot", "title": "Type: Chemical\u003cbr\u003eProperties: {}"}, {"font": {"color": "white"}, "group": "Plant", "id": "H. Foliosum", "label": "H. Foliosum", "shape": "dot", "title": "Type: Plant\u003cbr\u003eProperties: {}"}, {"font": {"color": "white"}, "group": "Plant", "id": "H. \u00d7 Inodorum", "label": "H. \u00d7 Inodorum", "shape": "dot", "title": "Type: Plant\u003cbr\u003eProperties: {}"}, {"font": {"color": "white"}, "group": "Plant", "id": "H. Xylosteifolium", "label": "H. Xylosteifolium", "shape": "dot", "title": "Type: Plant\u003cbr\u003eProperties: {}"}, {"font": {"color": "white"}, "group": "Person", "id": "Carlo Allioni", "label": "Carlo Allioni", "shape": "dot", "title": "Type: Person\u003cbr\u003eProperties: {}"}, {"font": {"color": "white"}, "group": "Plant", "id": "Androsaemum Officinale", "label": "Androsaemum Officinale", "shape": "dot", "title": "Type: Plant\u003cbr\u003eProperties: {}"}, {"font": {"color": "white"}, "group": "Plant", "id": "H. Androsaemum Var. Aureum", "label": "H. Androsaemum Var. Aureum", "shape": "dot", "title": "Type: Plant\u003cbr\u003eProperties: {}"}, {"font": {"color": "white"}, "group": "Plant", "id": "H. Androsaemum F. Variegatum", "label": "H. Androsaemum F. Variegatum", "shape": "dot", "title": "Type: Plant\u003cbr\u003eProperties: {}"}, {"font": {"color": "white"}, "group": "Location", "id": "British Isles", "label": "British Isles", "shape": "dot", "title": "Type: Location\u003cbr\u003eProperties: {}"}, {"font": {"color": "white"}, "group": "Location", "id": "Ardennes Forest", "label": "Ardennes Forest", "shape": "dot", "title": "Type: Location\u003cbr\u003eProperties: {}"}, {"font": {"color": "white"}, "group": "Location", "id": "Pyrenees Mountains", "label": "Pyrenees Mountains", "shape": "dot", "title": "Type: Location\u003cbr\u003eProperties: {}"}, {"font": {"color": "white"}, "group": "Location", "id": "Spain", "label": "Spain", "shape": "dot", "title": "Type: Location\u003cbr\u003eProperties: {}"}, {"font": {"color": "white"}, "group": "Location", "id": "Portugal", "label": "Portugal", "shape": "dot", "title": "Type: Location\u003cbr\u003eProperties: {}"}, {"font": {"color": "white"}, "group": "Location", "id": "Italy", "label": "Italy", "shape": "dot", "title": "Type: Location\u003cbr\u003eProperties: {}"}, {"font": {"color": "white"}, "group": "Location", "id": "Germany", "label": "Germany", "shape": "dot", "title": "Type: Location\u003cbr\u003eProperties: {}"}, {"font": {"color": "white"}, "group": "Location", "id": "Denmark", "label": "Denmark", "shape": "dot", "title": "Type: Location\u003cbr\u003eProperties: {}"}, {"font": {"color": "white"}, "group": "Location", "id": "Switzerland", "label": "Switzerland", "shape": "dot", "title": "Type: Location\u003cbr\u003eProperties: {}"}, {"font": {"color": "white"}, "group": "Location", "id": "Austria", "label": "Austria", "shape": "dot", "title": "Type: Location\u003cbr\u003eProperties: {}"}, {"font": {"color": "white"}, "group": "Location", "id": "Balkans", "label": "Balkans", "shape": "dot", "title": "Type: Location\u003cbr\u003eProperties: {}"}, {"font": {"color": "white"}, "group": "Location", "id": "Turkey", "label": "Turkey", "shape": "dot", "title": "Type: Location\u003cbr\u003eProperties: {}"}, {"font": {"color": "white"}, "group": "Location", "id": "Caucasus", "label": "Caucasus", "shape": "dot", "title": "Type: Location\u003cbr\u003eProperties: {}"}, {"font": {"color": "white"}, "group": "Location", "id": "Iran", "label": "Iran", "shape": "dot", "title": "Type: Location\u003cbr\u003eProperties: {}"}, {"font": {"color": "white"}, "group": "Location", "id": "Corsica", "label": "Corsica", "shape": "dot", "title": "Type: Location\u003cbr\u003eProperties: {}"}, {"font": {"color": "white"}, "group": "Location", "id": "Otway Ranges", "label": "Otway Ranges", "shape": "dot", "title": "Type: Location\u003cbr\u003eProperties: {}"}, {"font": {"color": "white"}, "group": "Location", "id": "South Gippsland Hills", "label": "South Gippsland Hills", "shape": "dot", "title": "Type: Location\u003cbr\u003eProperties: {}"}, {"font": {"color": "white"}, "group": "Location", "id": "Dandenong Ranges", "label": "Dandenong Ranges", "shape": "dot", "title": "Type: Location\u003cbr\u003eProperties: {}"}, {"font": {"color": "white"}, "group": "Location", "id": "Blue Mountains", "label": "Blue Mountains", "shape": "dot", "title": "Type: Location\u003cbr\u003eProperties: {}"}, {"font": {"color": "white"}, "group": "Location", "id": "Mansfield", "label": "Mansfield", "shape": "dot", "title": "Type: Location\u003cbr\u003eProperties: {}"}, {"font": {"color": "white"}, "group": "Location", "id": "Tasmania", "label": "Tasmania", "shape": "dot", "title": "Type: Location\u003cbr\u003eProperties: {}"}, {"font": {"color": "white"}, "group": "Location", "id": "North Island", "label": "North Island", "shape": "dot", "title": "Type: Location\u003cbr\u003eProperties: {}"}, {"font": {"color": "white"}, "group": "Organization", "id": "Royal Horticultural Society\u0027S Botanical Garden", "label": "Royal Horticultural Society\u0027S Botanical Garden", "shape": "dot", "title": "Type: Organization\u003cbr\u003eProperties: {}"}, {"font": {"color": "white"}, "group": "Organism", "id": "Lathronympha Strigana", "label": "Lathronympha Strigana", "shape": "dot", "title": "Type: Organism\u003cbr\u003eProperties: {}"}, {"font": {"color": "white"}, "group": "Organism", "id": "Chrysolina Abchasica", "label": "Chrysolina Abchasica", "shape": "dot", "title": "Type: Organism\u003cbr\u003eProperties: {}"}, {"font": {"color": "white"}, "group": "Organization", "id": "Landcare Research", "label": "Landcare Research", "shape": "dot", "title": "Type: Organization\u003cbr\u003eProperties: {}"}, {"font": {"color": "white"}, "group": "Pest", "id": "Nematodes", "label": "Nematodes", "shape": "dot", "title": "Type: Pest\u003cbr\u003eProperties: {}"}, {"font": {"color": "white"}, "group": "Pest", "id": "Thrips", "label": "Thrips", "shape": "dot", "title": "Type: Pest\u003cbr\u003eProperties: {}"}, {"font": {"color": "white"}, "group": "Pest", "id": "Scale", "label": "Scale", "shape": "dot", "title": "Type: Pest\u003cbr\u003eProperties: {}"}, {"font": {"color": "white"}, "group": "Cultivar", "id": "Glacier", "label": "Glacier", "shape": "dot", "title": "Type: Cultivar\u003cbr\u003eProperties: {}"}, {"font": {"color": "white"}, "group": "Cultivar", "id": "Matisse", "label": "Matisse", "shape": "dot", "title": "Type: Cultivar\u003cbr\u003eProperties: {}"}, {"font": {"color": "white"}, "group": "Cultivar", "id": "Picasso", "label": "Picasso", "shape": "dot", "title": "Type: Cultivar\u003cbr\u003eProperties: {}"}, {"font": {"color": "white"}, "group": "Cultivar", "id": "Pollock", "label": "Pollock", "shape": "dot", "title": "Type: Cultivar\u003cbr\u003eProperties: {}"}, {"font": {"color": "white"}, "group": "Organization", "id": "North Carolina State University", "label": "North Carolina State University", "shape": "dot", "title": "Type: Organization\u003cbr\u003eProperties: {}"}, {"font": {"color": "white"}, "group": "Concept", "id": "Folk Medicine", "label": "Folk Medicine", "shape": "dot", "title": "Type: Concept\u003cbr\u003eProperties: {}"}, {"font": {"color": "white"}, "group": "Chemical", "id": "Hypericin", "label": "Hypericin", "shape": "dot", "title": "Type: Chemical\u003cbr\u003eProperties: {}"}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "Hypericum Androsaemum", "label": "HAS_COMMON_NAME", "title": "Properties: {}", "to": "Shrubby St. John\u0027S Wort"}, {"arrows": "to", "from": "Hypericum Androsaemum", "label": "HAS_COMMON_NAME", "title": "Properties: {}", "to": "Tutsan"}, {"arrows": "to", "from": "Hypericum Androsaemum", "label": "HAS_COMMON_NAME", "title": "Properties: {}", "to": "Sweet-Amber"}, {"arrows": "to", "from": "Hypericum Androsaemum", "label": "IS_IN_FAMILY", "title": "Properties: {}", "to": "Hypericaceae"}, {"arrows": "to", "from": "Hypericum Androsaemum", "label": "IS_IN_GENUS", "title": "Properties: {}", "to": "Hypericum"}, {"arrows": "to", "from": "Hypericum Androsaemum", "label": "IS_IN_SECTION", "title": "Properties: {}", "to": "Hypericum Sect. Androsaemum"}, {"arrows": "to", "from": "Carl Linnaeus", "label": "DESCRIBED", "title": "Properties: {}", "to": "Hypericum Androsaemum"}, {"arrows": "to", "from": "Norman Robson", "label": "PUBLISHED_MONOGRAPH_ON", "title": "Properties: {}", "to": "Hypericum"}, {"arrows": "to", "from": "Norman Robson", "label": "PLACED_IN_SECTION", "title": "Properties: {}", "to": "Hypericum Androsaemum"}, {"arrows": "to", "from": "Hypericum Androsaemum", "label": "NATIVE_TO", "title": "Properties: {}", "to": "Western Europe"}, {"arrows": "to", "from": "Hypericum Androsaemum", "label": "NATIVE_TO", "title": "Properties: {}", "to": "North Africa"}, {"arrows": "to", "from": "Hypericum Androsaemum", "label": "NATIVE_TO", "title": "Properties: {}", "to": "Middle East"}, {"arrows": "to", "from": "Hypericum Androsaemum", "label": "INTRODUCED_TO", "title": "Properties: {}", "to": "Australia"}, {"arrows": "to", "from": "Hypericum Androsaemum", "label": "INTRODUCED_TO", "title": "Properties: {}", "to": "New Zealand"}, {"arrows": "to", "from": "Hypericum Androsaemum", "label": "IS_A", "title": "Properties: {}", "to": "Noxious Weed"}, {"arrows": "to", "from": "Hypericum Androsaemum", "label": "CULTIVATED_AS", "title": "Properties: {}", "to": "Ornamental Plant"}, {"arrows": "to", "from": "Albury Purple", "label": "CULTIVAR_OF", "title": "Properties: {}", "to": "Hypericum Androsaemum"}, {"arrows": "to", "from": "Golden Tutsan", "label": "CULTIVAR_OF", "title": "Properties: {}", "to": "Hypericum Androsaemum"}, {"arrows": "to", "from": "Hypericum Androsaemum", "label": "CONTAINS", "title": "Properties: {}", "to": "Red Pigment"}, {"arrows": "to", "from": "Hypericum Androsaemum", "label": "CONTAINS", "title": "Properties: {}", "to": "Xanthone"}, {"arrows": "to", "from": "Hypericum Androsaemum", "label": "CONTAINS", "title": "Properties: {}", "to": "Chlorogenic Acid"}, {"arrows": "to", "from": "Hypericum Androsaemum", "label": "CONTAINS", "title": "Properties: {}", "to": "Shikimic Acid"}, {"arrows": "to", "from": "Hypericum Androsaemum", "label": "CONTAINS", "title": "Properties: {}", "to": "Rutin"}, {"arrows": "to", "from": "Hypericum Androsaemum", "label": "CONTAINS", "title": "Properties: {}", "to": "Epicatechin"}, {"arrows": "to", "from": "Hypericum Androsaemum", "label": "CONTAINS", "title": "Properties: {}", "to": "Hyperoside"}, {"arrows": "to", "from": "Hypericum Androsaemum", "label": "SIMILAR_TO", "title": "Properties: {}", "to": "H. Foliosum"}, {"arrows": "to", "from": "Hypericum Androsaemum", "label": "SIMILAR_TO", "title": "Properties: {}", "to": "H. \u00d7 Inodorum"}, {"arrows": "to", "from": "Hypericum Androsaemum", "label": "SIMILAR_TO", "title": "Properties: {}", "to": "H. Xylosteifolium"}, {"arrows": "to", "from": "Carlo Allioni", "label": "DESCRIBED", "title": "Properties: {}", "to": "Androsaemum Officinale"}, {"arrows": "to", "from": "Androsaemum Officinale", "label": "SYNONYM_OF", "title": "Properties: {}", "to": "Hypericum Androsaemum"}, {"arrows": "to", "from": "H. Androsaemum Var. Aureum", "label": "VARIETY_OF", "title": "Properties: {}", "to": "Hypericum Androsaemum"}, {"arrows": "to", "from": "H. Androsaemum F. Variegatum", "label": "FORM_OF", "title": "Properties: {}", "to": "Hypericum Androsaemum"}, {"arrows": "to", "from": "Hypericum Androsaemum", "label": "ABUNDANT_IN", "title": "Properties: {}", "to": "British Isles"}, {"arrows": "to", "from": "Hypericum Androsaemum", "label": "ABUNDANT_IN", "title": "Properties: {}", "to": "Ardennes Forest"}, {"arrows": "to", "from": "Hypericum Androsaemum", "label": "FOUND_IN", "title": "Properties: {}", "to": "Pyrenees Mountains"}, {"arrows": "to", "from": "Hypericum Androsaemum", "label": "FOUND_IN", "title": "Properties: {}", "to": "Spain"}, {"arrows": "to", "from": "Hypericum Androsaemum", "label": "FOUND_IN", "title": "Properties: {}", "to": "Portugal"}, {"arrows": "to", "from": "Hypericum Androsaemum", "label": "FOUND_IN", "title": "Properties: {}", "to": "Italy"}, {"arrows": "to", "from": "Hypericum Androsaemum", "label": "FOUND_IN", "title": "Properties: {}", "to": "Germany"}, {"arrows": "to", "from": "Hypericum Androsaemum", "label": "FOUND_IN", "title": "Properties: {}", "to": "Denmark"}, {"arrows": "to", "from": "Hypericum Androsaemum", "label": "FOUND_IN", "title": "Properties: {}", "to": "Switzerland"}, {"arrows": "to", "from": "Hypericum Androsaemum", "label": "FOUND_IN", "title": "Properties: {}", "to": "Austria"}, {"arrows": "to", "from": "Hypericum Androsaemum", "label": "FOUND_IN", "title": "Properties: {}", "to": "Balkans"}, {"arrows": "to", "from": "Hypericum Androsaemum", "label": "FOUND_IN", "title": "Properties: {}", "to": "Turkey"}, {"arrows": "to", "from": "Hypericum Androsaemum", "label": "FOUND_IN", "title": "Properties: {}", "to": "Caucasus"}, {"arrows": "to", "from": "Hypericum Androsaemum", "label": "FOUND_IN", "title": "Properties: {}", "to": "Iran"}, {"arrows": "to", "from": "Hypericum Androsaemum", "label": "EXTINCT_IN", "title": "Properties: {}", "to": "Corsica"}, {"arrows": "to", "from": "Hypericum Androsaemum", "label": "INVASIVE_IN", "title": "Properties: {}", "to": "Otway Ranges"}, {"arrows": "to", "from": "Hypericum Androsaemum", "label": "INVASIVE_IN", "title": "Properties: {}", "to": "South Gippsland Hills"}, {"arrows": "to", "from": "Hypericum Androsaemum", "label": "INVASIVE_IN", "title": "Properties: {}", "to": "Dandenong Ranges"}, {"arrows": "to", "from": "Hypericum Androsaemum", "label": "INVASIVE_IN", "title": "Properties: {}", "to": "Blue Mountains"}, {"arrows": "to", "from": "Hypericum Androsaemum", "label": "INVASIVE_IN", "title": "Properties: {}", "to": "Mansfield"}, {"arrows": "to", "from": "Hypericum Androsaemum", "label": "FOUND_IN", "title": "Properties: {}", "to": "Tasmania"}, {"arrows": "to", "from": "Hypericum Androsaemum", "label": "INVASIVE_IN", "title": "Properties: {}", "to": "New Zealand"}, {"arrows": "to", "from": "Hypericum Androsaemum", "label": "INTRODUCED_VIA", "title": "Properties: {}", "to": "Royal Horticultural Society\u0027S Botanical Garden"}, {"arrows": "to", "from": "Lathronympha Strigana", "label": "BIOLOGICAL_CONTROL_FOR", "title": "Properties: {}", "to": "Hypericum Androsaemum"}, {"arrows": "to", "from": "Chrysolina Abchasica", "label": "BIOLOGICAL_CONTROL_FOR", "title": "Properties: {}", "to": "Hypericum Androsaemum"}, {"arrows": "to", "from": "Landcare Research", "label": "INVESTIGATED_BIOCONTROL_FOR", "title": "Properties: {}", "to": "Hypericum Androsaemum"}, {"arrows": "to", "from": "Nematodes", "label": "PEST_OF", "title": "Properties: {}", "to": "Hypericum Androsaemum"}, {"arrows": "to", "from": "Thrips", "label": "PEST_OF", "title": "Properties: {}", "to": "Hypericum Androsaemum"}, {"arrows": "to", "from": "Scale", "label": "PEST_OF", "title": "Properties: {}", "to": "Hypericum Androsaemum"}, {"arrows": "to", "from": "Glacier", "label": "CULTIVAR_OF", "title": "Properties: {}", "to": "Hypericum Androsaemum"}, {"arrows": "to", "from": "Matisse", "label": "CULTIVAR_OF", "title": "Properties: {}", "to": "Hypericum Androsaemum"}, {"arrows": "to", "from": "Picasso", "label": "CULTIVAR_OF", "title": "Properties: {}", "to": "Hypericum Androsaemum"}, {"arrows": "to", "from": "Pollock", "label": "CULTIVAR_OF", "title": "Properties: {}", "to": "Hypericum Androsaemum"}, {"arrows": "to", "from": "North Carolina State University", "label": "DEVELOPED", "title": "Properties: {}", "to": "Matisse"}, {"arrows": "to", "from": "North Carolina State University", "label": "DEVELOPED", "title": "Properties: {}", "to": "Picasso"}, {"arrows": "to", "from": "North Carolina State University", "label": "DEVELOPED", "title": "Properties: {}", "to": "Pollock"}, {"arrows": "to", "from": "Hypericum Androsaemum", "label": "USED_IN", "title": "Properties: {}", "to": "Folk Medicine"}, {"arrows": "to", "from": "Hypericum Androsaemum", "label": "DOES_NOT_CONTAIN", "title": "Properties: {}", "to": "Hypericin"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": true,
+        "filter": [
+            "physics"
+        ]
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+                  // if this network requires displaying the configure window,
+                  // put it in its div
+                  options.configure["container"] = document.getElementById("config");
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>
